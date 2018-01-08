@@ -1,4 +1,4 @@
-var myApp = angular.module('footballApp',['ngRoute','ui.bootstrap']);
+var myApp = angular.module('footballApp',['ngRoute']);
 
 //Main controller
 myApp.controller('allDataController',['$http',function($http){
@@ -14,7 +14,6 @@ myApp.controller('allDataController',['$http',function($http){
         url: main.jsonURL
       }).then(function successHandler(response) {
           console.log(response);
-          main.counter = 0;
           main.allMatches = response.data;
         }, function errorHandler(response){
           console.log(response);
