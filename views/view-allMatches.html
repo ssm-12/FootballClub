@@ -3,36 +3,25 @@
     <tr style="background-color:gray">
       <th>Round No.</th>
       <th>Round Name</th>
-      <th>Details of Matches</th>
+      <th>Date</th>
+      <th>Team 1</th>
+      <th></th>
+      <th>Team 2</th>
+      <th>Score(T1)</th>
+      <th>Score(T2)</th>
     </tr>
     <tbody ng-repeat="round in ctrlAllData.allMatches.rounds">
       <tr>
         <td>{{$index + 1}}</td>
         <td>{{round.name}}</td>
-        <td>
-          <table class="table-responsive table-striped table-hover">
-            <tr>
-              <th>Sr No.</th>
-              <th>Date</th>
-              <th>Team 1</th>
-              <th></th>
-              <th>Team 2</th>
-              <th>Score(T1)</th>
-              <th>Score(T2)</th>
-            </tr>
-            <tbody ng-repeat="match in round.matches">
-              <tr>
-                <td>{{$index + 1}}</td>
-                <td>{{match.date}}</td>
-                <td>{{match.team1.name}}</td>
-                <td>VS</td>
-                <td>{{match.team2.name}}</td>
-                <td>{{match.score1}}</td>
-                <td>{{match.score2}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </td>
+        <tbody ng-repeat="match in round.matches">
+            <td>{{match.date}}</td>
+            <td>{{match.team1.name}}</td>
+            <td>VS</td>
+            <td>{{match.team2.name}}</td>
+            <td>{{match.score1}}</td>
+            <td>{{match.score2}}</td>
+        </tbody>
       </tr>
     </tbody>
   </table>
