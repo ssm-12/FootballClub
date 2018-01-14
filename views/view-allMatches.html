@@ -1,28 +1,44 @@
+
 <div class="col-xs-12 col-md-12 col-sm-12 col-lg-12" ng-init="ctrlAllData.loadAllMatchDetails()">
-  <table class="table table-stiped">
-    <tr style="background-color:gray">
-      <th>Round No.</th>
-      <th>Round Name</th>
-      <th>Date</th>
-      <th>Team 1</th>
-      <th></th>
-      <th>Team 2</th>
-      <th>Score(T1)</th>
-      <th>Score(T2)</th>
-    </tr>
-    <tbody ng-repeat="round in ctrlAllData.allMatches.rounds">
-      <tr>
-        <td>{{$index + 1}}</td>
-        <td>{{round.name}}</td>
-        <tbody ng-repeat="match in round.matches">
-            <td>{{match.date}}</td>
-            <td>{{match.team1.name}}</td>
-            <td>VS</td>
-            <td>{{match.team2.name}}</td>
-            <td>{{match.score1}}</td>
-            <td>{{match.score2}}</td>
-        </tbody>
+  <h2 class="well well-sm" style="text-align: center">Match Statistics</h2>
+
+  <div>
+    <select ng-model="filterBy" ng-options="x for x in ctrlAllData.filterByOptions" placeholder="Filter By" style="vertical-align:top;">
+        <option value="" disabled selected>Filter By</option>
+    </select>
+    <input id="txtSearch" placeholder="Search Text" type="search" style="vertical-align:top;" ng-change="ctrlAllData.filterData()" ng-model="ctrlAllData.searchText">
+  </div>
+
+  <table class="table table-responsive table-hover">
+    <thead>
+      <tr style="background-color:green; color:white">
+        <th>Sr No.</th>
+        <th>Round Name</th>
+        <th>Date</th>
+        <th>Team 1</th>
+        <th>Team 2</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody ng-repeat="match in ctrlAllData.filteredMatches">
+      <tr ng-click="ctrlAllData.singleMatchDetails(match.team1.name)">
+        <td>{{match.index}}</td>
+        <td>{{match.roundName}}</td>
+        <td>{{match.date}}</td>
+        <td>{{match.team1.name}}</td>
+        <td>{{match.team2.name}}</td>
+        <td>{{match.score1}} - {{match.score2}}</td>
       </tr>
     </tbody>
+  </table>
+  <div data-pagination="" data-num-pages="numPages()"
+      data-current-page="currentPage" data-max-size="maxSize"
+      data-boundary-links="true">
+  </div>
+  <table>
+    <tr>
+      <td>Records per page</td>
+      <td><input ng-model="numPerPage"></td>
+    </tr>
   </table>
 </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="footballApp">
+<html lang="en" ng-app="myAngular">
 
   <head>
 
@@ -9,6 +9,9 @@
     <meta name="author" content="">
 
     <title>Football Mania</title>
+
+    <!--Loaded for UI Bootstrap Pagination-->
+    <link data-require="bootstrap-css@2.3.2" data-semver="2.3.2" rel="stylesheet" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" />
 
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -65,9 +68,11 @@
 
     <!-- About -->
     <section class="content-section bg-light" id="infodiv">
-      <div class="container text-center">
-        <div class="row" ng-view>
+      <div class="container">
+        <div class="row">
+          <div ng-view style=" margin: auto; padding: auto">
 
+          </div>
         </div>
       </div>
     </section>
@@ -248,6 +253,7 @@
     <!-- Including angular related scripts here -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular-route.min.js"></script>
+    <script data-require="angular-ui-bootstrap@0.3.0" data-semver="0.3.0" src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.3.0.min.js"></script>
     <script src="angular/app.js"></script>
     <script type="text/javascript" src="angular/route.js"></script>
   </body>

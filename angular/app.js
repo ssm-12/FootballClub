@@ -1,52 +1,82 @@
-var myApp = angular.module('footballApp',['ngRoute']);
+var app = angular.module('myAngular',['ngRoute','ui.bootstrap']);
 
-//Main controller
-myApp.controller('allDataController',['$http','$q',function($http,$q){
-  var main = this;
+app.controller('allDataController',['$http','$q','$location','$scope','$filter',function($http,$q,$location,$scope,$filter){
 
-  //Data Source URLs
-  this.jsonURL2015 = 'https://raw.githubusercontent.com/openfootball/football.json/master/2015-16/en.1.json';
-  this.jsonURL2016 = 'https://raw.githubusercontent.com/openfootball/football.json/master/2016-17/en.1.json';
+    var main = this;
 
-  //Load all match details
-  this.loadAllMatchDetails = function(){
+    //Data Source URLs
+    this.jsonURL2015 = 'https://raw.githubusercontent.com/openfootball/football.json/master/2015-16/en.1.json';
+    this.jsonURL2016 = 'https://raw.githubusercontent.com/openfootball/football.json/master/2016-17/en.1.json';
 
-      //Using $q.all to get multiple data through http request
-      main.match_list_1 = $http.get(main.jsonURL2015, {'cache': false});
-      main.match_list_2 = $http.get(main.jsonURL2015, {'cache': false});
+    //Load all match details
+    this.loadAllMatchDetails = function(){
 
-      $q.all([main.match_list_1, main.match_list_2]).then(function(values) {
-          console.log(values);
-      });
-      //$q.all - Ends Here
+        //Initialization Part
+        $scope.filteredMatches = [], $scope.currentPage = 1, $scope.numPerPage = 10, $scope.maxSize = 5;
+        main.allData = [], main.searchFilteredData = [];
+        main.allMatches = [], main.matchIndex = 1;
+        main.filterByOptions = ["Team Name","Score","Year","Full Date","Round Name"];
+        main.searchText = "";
+
+        //Using $q.all to get multiple data through http request
+        main.allData.push($http.get(main.jsonURL2015, {'cache': false}));
+        main.allData.push($http.get(main.jsonURL2016, {'cache': false}));
 
 
+        //For merging both responses into single obect (allMatches) once both the responses received
+        $q.all(main.allData).then(function(response) {
 
-      //Function to get data through http request
-      // var getData = function(linkURL){
-      //   $http({
-      //       method: 'GET',
-      //       url: linkURL
-      //   }).then(function successHandler(response) {
-      //       console.log('1');
-      //       console.log(response);
-      //       angular.forEach(response.data.rounds, function(round) {
-      //           main.round = round;
-      //           angular.forEach(round.matches, function(match) {
-      //             match.roundName = main.round.name;
-      //             main.allMatches.push(match);
-      //           });
-      //       });
-      //       console.log('2');
-      //       console.log(main.allMatches);
-      //     }, function errorHandler(response){
-      //       console.log(response);
-      //     })
-      // }
-      //
-      // main.allMatches = [];
-      // getData(main.jsonURL2015);
-      // console.log('3');
-      // console.log(main.allMatches);
-  }
+            angular.forEach(response, function(dataByYear) {
+              angular.forEach(dataByYear, function(all) {
+                  //console.log(all.rounds);
+                  angular.forEach(all.rounds, function(round) {
+                      main.roundName = round.name
+                      angular.forEach(round.matches, function(matchDetails) {
+                          matchDetails.roundName = main.roundName;
+                          matchDetails.index = main.matchIndex++;
+                          main.allMatches.push(matchDetails);
+                          main.searchFilteredData = main.allMatches; //As there is no search filter applicable at the time of loading
+                          main.filteredMatches = main.allMatches.slice(0,10);//This will be used for displaying records in the table
+                      });
+                  });
+              });
+            });
+
+            console.log(main.allMatches);
+
+        });
+
+    };
+
+    //Function to redirect to view containing single match details
+    this.singleMatchDetails = function(teamname) {
+        //$location.path("/something");
+        alert(teamname);
+    }
+
+    //Function to get the number of pages
+    $scope.numPages = function() {
+        return Math.ceil(main.searchFilteredData.length / $scope.numPerPage);
+    };
+
+    //Creating filtered result set here
+    $scope.$watch('currentPage + numPerPage', function() {
+        var begin = (($scope.currentPage - 1) * $scope.numPerPage),
+          end = begin + $scope.numPerPage;
+        if(main.searchText != ""){
+          main.filteredMatches = main.searchFilteredData.slice(begin, end);
+        }
+        else {
+          main.filteredMatches = main.allMatches.slice(begin, end);
+        }
+    });
+
+    //Function to filter data according to search text
+    this.filterData = function(){
+        main.searchFilteredData = $filter('filter')(main.allMatches, { roundName: main.searchText });
+        main.filteredMatches = main.searchFilteredData.slice(0, $scope.numPerPage);
+        console.log(main.searchText);
+    };
+
+
 }]);

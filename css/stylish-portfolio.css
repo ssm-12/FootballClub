@@ -290,3 +290,29 @@ a {
 
 .text-secondary {
   color: #ecb807 !important; }
+
+input select{
+  vertical-align:top;
+}
+  /*input {
+    width:100px;
+    height:20px;
+    vertical-align:top;
+}
+
+select {
+    border:1px solid #ccc !important;
+    vertical-align:top !important;
+    height:20px !important;
+}
+option {
+    color:red !important;
+    width:100px !important;
+    text-decoration:underline !important;
+}
+
+input, select, textarea {
+  box-sizing: border-box !important;
+  -moz-box-sizing: border-box !important;
+  -webkit-box-sizing: border-box !important;
+}*/
