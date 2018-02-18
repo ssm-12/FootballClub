@@ -16,7 +16,7 @@ app.controller('allDataController',['$http','$q','$location','$scope','$filter',
         main.allData = [], main.searchFilteredData = [];
         main.allMatches = [], main.matchIndex = 1;
         main.filterByOptions = ["Team Name","Score","Year","Full Date","Round Name"];
-        main.searchText = "";
+        main.searchText = "", main.filterBy="";
 
         //Using $q.all to get multiple data through http request
         main.allData.push($http.get(main.jsonURL2015, {'cache': false}));
@@ -62,7 +62,7 @@ app.controller('allDataController',['$http','$q','$location','$scope','$filter',
     //Creating filtered result set here
     $scope.$watch('currentPage + numPerPage', function() {
         var begin = (($scope.currentPage - 1) * $scope.numPerPage),
-          end = begin + $scope.numPerPage;
+          end = begin + parseInt($scope.numPerPage);
         if(main.searchText != ""){
           main.filteredMatches = main.searchFilteredData.slice(begin, end);
         }
@@ -73,10 +73,40 @@ app.controller('allDataController',['$http','$q','$location','$scope','$filter',
 
     //Function to filter data according to search text
     this.filterData = function(){
-        main.searchFilteredData = $filter('filter')(main.allMatches, { roundName: main.searchText });
+        switch (main.filterBy) {
+          case 'Team Name':
+            //main.searchFilteredData = $filter('filter')(main.allMatches, { team1 : { name : main.searchText }  });
+            main.searchFilteredData = $filter('filter')(main.allMatches, function(value){
+                  //console.log(value.team1.name.search(main.searchText));
+                  if(value.team1.name.search(new RegExp(main.searchText, "i")) !== -1){
+                      return value;
+                  }
+                  else if(value.team2.name.search(new RegExp(main.searchText, "i")) !== -1){
+                      return value;
+                  }
+            });
+            break;
+          case 'Score':
+            break;
+          case 'Year':
+            break;
+          case 'Round Name':
+            break;
+          case 'Score':
+            break;
+          default:
+
+        }
+        //main.searchFilteredData = $filter('filter')(main.allMatches, { roundName: main.searchText });
         main.filteredMatches = main.searchFilteredData.slice(0, $scope.numPerPage);
-        console.log(main.searchText);
+        //console.log(main.searchText);
     };
+
+    this.testFunction = function(data){
+      console.log('Test Function executed. Value : ');
+      console.log(data);
+      return true;
+    }
 
 
 }]);

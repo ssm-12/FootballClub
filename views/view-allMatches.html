@@ -3,7 +3,7 @@
   <h2 class="well well-sm" style="text-align: center">Match Statistics</h2>
 
   <div>
-    <select ng-model="filterBy" ng-options="x for x in ctrlAllData.filterByOptions" placeholder="Filter By" style="vertical-align:top;">
+    <select ng-model="ctrlAllData.filterBy" ng-options="x for x in ctrlAllData.filterByOptions" placeholder="Filter By" style="vertical-align:top;">
         <option value="" disabled selected>Filter By</option>
     </select>
     <input id="txtSearch" placeholder="Search Text" type="search" style="vertical-align:top;" ng-change="ctrlAllData.filterData()" ng-model="ctrlAllData.searchText">
@@ -34,6 +34,9 @@
   <div data-pagination="" data-num-pages="numPages()"
       data-current-page="currentPage" data-max-size="maxSize"
       data-boundary-links="true">
+  </div>
+  <div>
+      <p>Showing Result {{numPerPage}} of {{ctrlAllData.searchFilteredData.length}}</p>
   </div>
   <table>
     <tr>
